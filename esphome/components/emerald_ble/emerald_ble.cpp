@@ -233,7 +233,7 @@ void Emerald::gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_par
     // This event is sent once authentication has completed
     case ESP_GAP_BLE_AUTH_CMPL_EVT: {
       if (param->ble_security.auth_cmpl.success) {
-        auto status = esp_ble_gattc_register_for_notify(this->parent_->get_gattc_if(), this->parent_->remote_bda,
+        auto status = esp_ble_gattc_register_for_notify(this->parent_->get_gattc_if(), this->parent_->get_remote_bda(),
                                                             this->time_read_char_handle_);
         if (status) {
           ESP_LOGW(TAG, "[%s] esp_ble_gattc_register_for_notify failed, status=%d",
@@ -257,7 +257,7 @@ void Emerald::gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_par
         }
         // Enable notifications for battery
         auto notify_battery_status = esp_ble_gattc_register_for_notify(
-            this->parent_->gattc_if, this->parent_->remote_bda, this->battery_char_handle_);
+            this->parent_->get_gattc_if(), this->parent_->get_remote_bda(), this->battery_char_handle_);
         if (notify_battery_status) {
           ESP_LOGW(TAG, "[%s] esp_ble_gattc_register_for_notify failed, status=%d",
                     this->parent_->address_str().c_str(), notify_battery_status);
